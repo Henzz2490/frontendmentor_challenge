@@ -1,0 +1,152 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    font-size: 13px;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Manrope', sans-serif;
+    background-color: hsl(210, 46%, 95%);
+}
+
+.wrapper {
+    background-color: #ffffff;
+    max-width: 730px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); 
+}
+
+.wrapper-hero {
+    display: flex;
+}
+
+/* ── Image ── */
+.hero-img {
+    flex-shrink: 0;        
+    width: 280px;        
+}
+
+.hero-img img {
+    height: 100%;
+    width: 100%;          
+    display: block;
+}
+
+/* For Hero Part */
+.hero {
+    display: flex;
+    padding: 2rem;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;             
+}
+
+.hero h1 {
+    font-weight: 700;
+    font-size: 1.1rem;
+    line-height: 1.4;
+    color: hsl(217, 19%, 35%);
+}
+
+.hero p {
+    font-weight: 500;
+    color: hsl(214, 17%, 51%);
+    line-height: 1.6;
+}
+
+/* ── Author ── */
+.author-information {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.author-img img {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    /* object-fit: cover; */
+}
+
+.author {
+    flex: 1;               
+    margin-left: 0.75rem;
+}
+
+.author p:first-child {
+    font-weight: 700;
+    color: hsl(217, 19%, 35%); 
+}
+
+.author p:last-child {
+    color: hsl(214, 17%, 51%);
+}
+
+/* ── Share button ── */
+.author-information .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background-color: hsl(214, 17%, 51%);
+    cursor: pointer;
+    flex-shrink: 0;
+    padding: 0;
+}
+
+.author-information .btn img {
+    width: 14px;
+    height: 14px;
+    filter: brightness(0) invert(1); /*This is to make the button looks visible or*/
+}
+
+.soc-med-icon {
+    display: none;
+    gap: 1rem;
+}
+
+/* to make the share button can be toggled and shows soc med icon */
+.soc-med-icon.is-open {
+    display: flex;
+}
+
+.soc-med-icon img{
+    background-color: hsl(217, 19%, 35%);
+    cursor: pointer;
+}
+
+
+
+@media (max-width: 768px) {
+
+    .wrapper {
+        width: 90%;
+        margin: 2rem auto;
+    }
+    
+    .wrapper-hero {
+        flex-direction: column;
+    }
+
+    .hero-img {
+        width: 100%;
+    }
+
+    .hero-img img {
+        height: 240px;
+        object-fit: cover;
+    }
+
+}
+
