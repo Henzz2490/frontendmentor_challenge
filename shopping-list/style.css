@@ -361,6 +361,71 @@ input::placeholder { color: #b0bbc8; }
   color: var(--text-done);
 }
 
+/* Edit button */
+.btn-edit {
+  background: none;
+  border: none;
+  color: #c8ced6;
+  cursor: pointer;
+  padding: 3px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  transition: color .15s, background .15s;
+  flex-shrink: 0;
+}
+.btn-edit:hover { color: var(--primary); background: #eef2ff; }
+.btn-edit svg { width: 14px; height: 14px; }
+
+/* Inline edit form */
+.item.editing {
+  display: block;
+  padding: 12px;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(90,103,216,.12);
+}
+
+.edit-form { display: flex; flex-direction: column; gap: 8px; }
+
+.edit-row {
+  display: flex;
+  gap: 8px;
+}
+
+.edit-name { flex: 3; }
+.edit-qty  { flex: 1; }
+.edit-price-wrap { flex: 2; }
+.edit-cat  { flex: 2; }
+
+.edit-error {
+  font-size: 0.78rem;
+  color: var(--danger);
+  background: var(--danger-light);
+  border: 1px solid #fed7d7;
+  border-radius: var(--radius-sm);
+  padding: 5px 10px;
+}
+
+.edit-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.btn-save, .btn-cancel {
+  padding: 5px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: background .15s;
+}
+.btn-save   { background: var(--primary); color: #fff; }
+.btn-save:hover { background: var(--primary-hover); }
+.btn-cancel { background: #edf2f7; color: var(--text-muted); }
+.btn-cancel:hover { background: #e2e8f0; }
+
 /* Delete button */
 .btn-delete {
   background: none;

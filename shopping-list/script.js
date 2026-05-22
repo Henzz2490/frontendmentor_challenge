@@ -2,6 +2,7 @@ const STORAGE_KEY = 'shopping-list-items';
 
 let items = load();
 let activeFilter = 'all';
+let editingId = null;
 
 const form        = document.getElementById('add-form');
 const nameInput   = document.getElementById('item-name');
@@ -66,9 +67,72 @@ function render() {
 
 function buildItemEl(item) {
   const li = document.createElement('li');
-  li.className = `item${item.done ? ' done' : ''}`;
   li.dataset.id = item.id;
 
+  if (editingId === item.id) {
+    li.className = 'item editing';
+    li.innerHTML = `
+      <div class="edit-form">
+        <div class="edit-row">
+          <input class="edit-name" type="text" value="${escHtml(item.name)}" placeholder="Item name" />
+          <input class="edit-qty"  type="number" value="${item.qty}" min="1" placeholder="Qty" />
+        </div>
+        <div class="edit-row">
+          <div class="input-prefix edit-price-wrap">
+            <span class="prefix">$</span>
+            <input class="edit-price" type="number" value="${item.price != null ? item.price : ''}" min="0" step="0.01" placeholder="0.00" />
+          </div>
+          <select class="edit-cat">
+            <option value="food"    ${item.category === 'food'    ? 'selected' : ''}>🍎 Food</option>
+            <option value="medical" ${item.category === 'medical' ? 'selected' : ''}>💊 Medical</option>
+            <option value="others"  ${item.category === 'others'  ? 'selected' : ''}>📦 Others</option>
+          </select>
+        </div>
+        <div class="edit-error" hidden></div>
+        <div class="edit-actions">
+          <button class="btn-save">Save</button>
+          <button class="btn-cancel">Cancel</button>
+        </div>
+      </div>`;
+
+    const nameEl  = li.querySelector('.edit-name');
+    const qtyEl   = li.querySelector('.edit-qty');
+    const priceEl = li.querySelector('.edit-price');
+    const catEl   = li.querySelector('.edit-cat');
+    const errEl   = li.querySelector('.edit-error');
+
+    nameEl.focus();
+    nameEl.select();
+
+    li.querySelector('.btn-save').addEventListener('click', () => {
+      const name  = nameEl.value.trim();
+      const qty   = qtyEl.value.trim();
+      const price = priceEl.value.trim();
+
+      errEl.hidden = true;
+      if (!name) { errEl.textContent = 'Name is required.'; errEl.hidden = false; nameEl.focus(); return; }
+      if (!qty || Number(qty) < 1) { errEl.textContent = 'Qty must be at least 1.'; errEl.hidden = false; qtyEl.focus(); return; }
+      if (price !== '' && (isNaN(Number(price)) || Number(price) < 0)) {
+        errEl.textContent = 'Enter a valid price or leave empty.'; errEl.hidden = false; priceEl.focus(); return;
+      }
+
+      saveEdit(item.id, name, qty, price, catEl.value);
+    });
+
+    li.querySelector('.btn-cancel').addEventListener('click', () => {
+      editingId = null;
+      render();
+    });
+
+    li.addEventListener('keydown', e => {
+      if (e.key === 'Enter') li.querySelector('.btn-save').click();
+      if (e.key === 'Escape') { editingId = null; render(); }
+    });
+
+    return li;
+  }
+
+  li.className = `item${item.done ? ' done' : ''}`;
   const priceText = item.price != null ? `$${Number(item.price).toFixed(2)}` : '';
 
   li.innerHTML = `
@@ -81,6 +145,12 @@ function buildItemEl(item) {
         ${priceText ? `<span class="price">${priceText}</span>` : ''}
       </div>
     </div>
+    <button class="btn-edit" aria-label="Edit ${escHtml(item.name)}">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+        <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+      </svg>
+    </button>
     <button class="btn-delete" aria-label="Remove ${escHtml(item.name)}">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <polyline points="3 6 5 6 21 6"/>
@@ -91,6 +161,7 @@ function buildItemEl(item) {
     </button>`;
 
   li.querySelector('.item-check').addEventListener('change', () => toggle(item.id));
+  li.querySelector('.btn-edit').addEventListener('click', () => { editingId = item.id; render(); });
   li.querySelector('.btn-delete').addEventListener('click', () => remove(item.id));
 
   return li;
@@ -118,6 +189,17 @@ function addItem(name, qty, price, category) {
     done: false,
     createdAt: Date.now(),
   });
+  render();
+}
+
+function saveEdit(id, name, qty, price, category) {
+  const item = items.find(i => i.id === id);
+  if (!item) return;
+  item.name     = name.trim();
+  item.qty      = Number(qty);
+  item.price    = price !== '' ? Number(price) : null;
+  item.category = category;
+  editingId     = null;
   render();
 }
 
