@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shopping List</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="app-header">
+      <div class="header-content">
+        <svg class="header-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 01-8 0"/>
+        </svg>
+        <h1>Shopping List</h1>
+      </div>
+      <div class="summary" id="summary">
+        <span id="summary-total">0 items</span>
+        <span class="dot">·</span>
+        <span id="summary-done">0 done</span>
+        <span class="dot">·</span>
+        <span id="summary-price"></span>
+      </div>
+    </header>
+
+    <main class="app-main">
+      <!-- Add Item Form -->
+      <section class="add-section">
+        <h2 class="section-title">Add Item</h2>
+        <form class="add-form" id="add-form" novalidate>
+          <div class="form-row">
+            <div class="form-group flex-3">
+              <label for="item-name">Item Name <span class="required">*</span></label>
+              <input type="text" id="item-name" placeholder="e.g. Paracetamol" autocomplete="off" required />
+            </div>
+            <div class="form-group flex-1">
+              <label for="item-qty">Qty <span class="required">*</span></label>
+              <input type="number" id="item-qty" placeholder="1" min="1" value="1" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group flex-2">
+              <label for="item-price">Price <span class="optional">(optional)</span></label>
+              <div class="input-prefix">
+                <span class="prefix">$</span>
+                <input type="number" id="item-price" placeholder="0.00" min="0" step="0.01" />
+              </div>
+            </div>
+            <div class="form-group flex-2">
+              <label for="item-category">Category <span class="required">*</span></label>
+              <select id="item-category">
+                <option value="food">🍎 Food</option>
+                <option value="medical">💊 Medical</option>
+                <option value="others">📦 Others</option>
+              </select>
+            </div>
+          </div>
+          <div id="form-error" class="form-error" hidden></div>
+          <button type="submit" class="btn-add">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Add to List
+          </button>
+        </form>
+      </section>
+
+      <!-- Filter Tabs -->
+      <section class="list-section">
+        <div class="filter-tabs" id="filter-tabs" role="tablist" aria-label="Filter by category">
+          <button class="tab active" data-filter="all" role="tab" aria-selected="true">All</button>
+          <button class="tab" data-filter="food" role="tab" aria-selected="false">🍎 Food</button>
+          <button class="tab" data-filter="medical" role="tab" aria-selected="false">💊 Medical</button>
+          <button class="tab" data-filter="others" role="tab" aria-selected="false">📦 Others</button>
+        </div>
+
+        <div class="list-controls">
+          <label class="show-completed-toggle">
+            <input type="checkbox" id="show-completed" checked />
+            Show completed
+          </label>
+          <button class="btn-clear-done" id="clear-done" title="Remove all checked items">
+            Clear done
+          </button>
+        </div>
+
+        <!-- Item Lists per Category -->
+        <div id="items-container">
+          <div class="empty-state" id="empty-state">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/>
+              <rect x="9" y="3" width="6" height="4" rx="1"/>
+              <line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/>
+            </svg>
+            <p>Your list is empty.</p>
+            <p class="empty-sub">Add your first item above!</p>
+          </div>
+
+          <div class="category-group" id="group-food" data-category="food" hidden>
+            <div class="category-header food">
+              <span>🍎 Food</span>
+              <span class="category-count" id="count-food"></span>
+            </div>
+            <ul class="item-list" id="list-food" aria-label="Food items"></ul>
+          </div>
+
+          <div class="category-group" id="group-medical" data-category="medical" hidden>
+            <div class="category-header medical">
+              <span>💊 Medical</span>
+              <span class="category-count" id="count-medical"></span>
+            </div>
+            <ul class="item-list" id="list-medical" aria-label="Medical items"></ul>
+          </div>
+
+          <div class="category-group" id="group-others" data-category="others" hidden>
+            <div class="category-header others">
+              <span>📦 Others</span>
+              <span class="category-count" id="count-others"></span>
+            </div>
+            <ul class="item-list" id="list-others" aria-label="Other items"></ul>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
